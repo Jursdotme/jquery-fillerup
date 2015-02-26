@@ -35,7 +35,7 @@ See the included [test.html](https://github.com/jursdotme/jquery-fillerup/blob/m
 ### Examples
 
 	$(function() {
-		$('.hero').matchHeight();
+		$('.hero').fillerup();
 	});
 
 Will set all elements with the class `hero` to the height of the browser window.<br>
