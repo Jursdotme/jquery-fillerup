@@ -1,0 +1,24 @@
+{
+    "name": "jQuery.Fillerup",
+    "version": "1.0.0",
+    "homepage": "https://github.com/jursdotme/jquery-fillerup",
+    "authors": [
+        "Rasmus Jürs <rasmus@jurs.me> (http://jurs.me/)"
+    ],
+    "description": "Easily scale elements to exact window sizes. Fillerup: The plugin that makes heroes.",
+    "main": "jquery.fillerup-min.js",
+    "keywords": [
+        "height",
+        "fullscreen",
+        "responsive",
+        "hero"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ]
+}

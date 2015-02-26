@@ -1,0 +1,11 @@
+.jumbotron {
+  background-image: url("hero-image.jpg");
+  background-size: cover;
+  background-position: center;
+}
+.jumbotron .container {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+}
