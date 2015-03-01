@@ -1,4 +1,4 @@
-# jquery.matchHeight.js #
+# jquery.fillerup.js #
 
 > *Fillerup* makes the height of all selected elements exactly equal to the height of the browser window.<br>
 With the ability to define min and max height as well as a subtracted value.
