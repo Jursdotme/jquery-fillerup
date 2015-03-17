@@ -1,5 +1,5 @@
 /**
-* jquery.fillerup.js v1.0.0
+* jquery.fillerup.js v1.1.0
 * http://jurs.me/
 * License: MIT
 */
@@ -8,22 +8,18 @@
 
   // Define constructor
   $.fn.Fillerup = function( options ) {
-
     // Define option defaults
-    var settings = $.extend({
-      subtract: 0,
-      minHeight: 0,
-      maxHeight: 0
-    }, options );
+      var settings = $.extend({
+        subtract: 0,
+        minHeight: 0,
+        maxHeight: 0
+      }, options );
 
-		var screenHeightCalculated,
-        subtractableHeight,
-        windowHeight;
+      var screenHeightCalculated,
+          subtractableHeight,
+          windowHeight;
 
-    scaledElement = this;
-
-    // Define main function
-    scaleElement = function(){
+      _this = $(this);
 
       subtractableHeight = settings.subtract;
     	minHeight = settings.minHeight;
@@ -38,18 +34,28 @@
         $(window).height() - subtractableHeight;
       }
 
-      scaledElement
+      $(this)
         .css('height', calculatedHeight + 'px')
-      	.css('min-height', 'minimumHeight'+'px')
+       	.css('min-height', 'minimumHeight'+'px')
       ;
-    }
 
-    // update heights on load and resize events
-    $( window ).load(scaleElement);
+      // update heights on load and resize events
+      $( window ).load( function() {
+        _this.Fillerup({
+          subtract: settings.subtract,
+          minHeight: settings.minHeight,
+          maxHeight: settings.maxHeight
+        });
+      });
 
-    // throttled update heights on resize events
-    $( window ).resize(scaleElement);
-
+      // throttled update heights on resize events
+      $( window ).resize( function() {
+        _this.Fillerup({
+          subtract: settings.subtract,
+          minHeight: settings.minHeight,
+          maxHeight: settings.maxHeight
+        });
+      });
   }
 
 }(jQuery));
