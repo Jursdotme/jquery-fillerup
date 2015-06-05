@@ -1,60 +1,58 @@
 (($) ->
-
   # Define constructor
-  $.fn.Fillerup = options ->
+
+  $.fn.Fillerup = (options) ->
     # Define option defaults
     settings = $.extend({
       subtract: 0
       minHeight: 0
       maxHeight: 0
     }, options)
+    screenHeightCalculated = undefined
+    windowHeight = undefined
+    _this = $(this)
+    calculatedHeight = $(window).height() - (settings.subtract)
+    # Throttle Fuction
 
-    selectedElement = $(this)
+    throttle = (fn, interval) ->
+      isWaiting = false
 
-    subtractableHeight = settings.subtract
-    minHeight = settings.minHeight
-    maxHeight = settings.maxHeight
-    calculatedHeight = $(window).height() - subtractableHeight
+      exec = ->
+        if isWaiting
+          return
+        isWaiting = true
+        setTimeout (->
+          isWaiting = false
+          fn()
+          return
+        ), interval
+        return
 
-    if calculatedHeight < minHeight
-      calculatedHeight = minHeight
+      exec
 
-    if calculatedHeight > maxHeight && maxHeight != 0
-      calculatedHeight = maxHeight
-
+    if calculatedHeight < settings.minHeight
+      calculatedHeight = settings.minHeight
+    if calculatedHeight > settings.maxHeight and settings.maxHeight != 0
+      calculatedHeight = settings.maxHeight
     else
-      $(window).height() - subtractableHeight
-
-
-    selectedElement
-      .css('height', calculatedHeight + 'px')
-      .css('min-height', 'minimumHeight'+'px')
-
-
+      $(window).height() - (settings.subtract)
+    $(this).css('height', calculatedHeight + 'px').css 'min-height', settings.minHeight + 'px'
     # update heights on load and resize events
-    $( window ).load ->
-      selectedElement.Fillerup ->
-        subtract: settings.subtract,
-        minHeight: settings.minHeight,
-        maxHeight: settings.maxHeight
-      return
-
-
-    # throttled update heights on resize events
-    id = undefined
-
-    doneResizing = ->
+    $(window).load ->
       _this.Fillerup
         subtract: settings.subtract
         minHeight: settings.minHeight
         maxHeight: settings.maxHeight
       return
-
-    $(window).resize ->
-      clearTimeout id
-      id = setTimeout(doneResizing, 500)
+    # exec on resize function once in every seconds
+    $(window).on 'resize', throttle(((event) ->
+      _this.Fillerup
+        subtract: settings.subtract
+        minHeight: settings.minHeight
+        maxHeight: settings.maxHeight
       return
+    ), 1000)
+    return
+
   return
-
-
 ) jQuery

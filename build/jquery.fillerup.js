@@ -5,47 +5,54 @@
  * license MIT
  */
 (function($) {
-  $.fn.Fillerup = options(function() {
-    var calculatedHeight, doneResizing, id, maxHeight, minHeight, selectedElement, settings, subtractableHeight;
+  $.fn.Fillerup = function(options) {
+    var _this, calculatedHeight, screenHeightCalculated, settings, throttle, windowHeight;
     settings = $.extend({
       subtract: 0,
       minHeight: 0,
       maxHeight: 0
     }, options);
-    selectedElement = $(this);
-    subtractableHeight = settings.subtract;
-    minHeight = settings.minHeight;
-    maxHeight = settings.maxHeight;
-    calculatedHeight = $(window).height() - subtractableHeight;
-    if (calculatedHeight < minHeight) {
-      calculatedHeight = minHeight;
+    screenHeightCalculated = void 0;
+    windowHeight = void 0;
+    _this = $(this);
+    calculatedHeight = $(window).height() - settings.subtract;
+    throttle = function(fn, interval) {
+      var exec, isWaiting;
+      isWaiting = false;
+      exec = function() {
+        if (isWaiting) {
+          return;
+        }
+        isWaiting = true;
+        setTimeout((function() {
+          isWaiting = false;
+          fn();
+        }), interval);
+      };
+      return exec;
+    };
+    if (calculatedHeight < settings.minHeight) {
+      calculatedHeight = settings.minHeight;
     }
-    if (calculatedHeight > maxHeight && maxHeight !== 0) {
-      calculatedHeight = maxHeight;
+    if (calculatedHeight > settings.maxHeight && settings.maxHeight !== 0) {
+      calculatedHeight = settings.maxHeight;
     } else {
-      $(window).height() - subtractableHeight;
+      $(window).height() - settings.subtract;
     }
-    selectedElement.css('height', calculatedHeight + 'px').css('min-height', 'minimumHeight' + 'px');
+    $(this).css('height', calculatedHeight + 'px').css('min-height', settings.minHeight + 'px');
     $(window).load(function() {
-      selectedElement.Fillerup(function() {
-        return {
-          subtract: settings.subtract,
-          minHeight: settings.minHeight,
-          maxHeight: settings.maxHeight
-        };
-      });
-    });
-    id = void 0;
-    doneResizing = function() {
       _this.Fillerup({
         subtract: settings.subtract,
         minHeight: settings.minHeight,
         maxHeight: settings.maxHeight
       });
-    };
-    return $(window).resize(function() {
-      clearTimeout(id);
-      id = setTimeout(doneResizing, 500);
     });
-  });
+    $(window).on('resize', throttle((function(event) {
+      _this.Fillerup({
+        subtract: settings.subtract,
+        minHeight: settings.minHeight,
+        maxHeight: settings.maxHeight
+      });
+    }), 1000));
+  };
 })(jQuery);
