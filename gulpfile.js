@@ -21,8 +21,8 @@ var banner = ['/**',
 
 // Build Task
 gulp.task('build', function() {
-  gulp.src('jquery.fillerup.coffee')
-    .pipe(coffee({bare: true}).on('error', gutil.log))
+  gulp.src('jquery.fillerup.js')
+    //.pipe(coffee({bare: true}).on('error', gutil.log))
     .pipe(header(banner, { pkg : pkg } ))
     .pipe(gulp.dest(DEST))
     .pipe(uglify())
