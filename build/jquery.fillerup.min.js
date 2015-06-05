@@ -1,6 +1,6 @@
 /**
  * jquery-fillerup - Fillerup makes the height of all selected elements exactly equal to the height of the browser window.<br> With the ability to define min and max height as well as a subtracted value.
- * version v1.1.0
+ * version v1.2.0
  * link https://github.com/Jursdotme/jquery-fillerup
  * license MIT
  */
