@@ -1,6 +1,6 @@
 /**
  * jquery-fillerup - Fillerup makes the height of all selected elements exactly equal to the height of the browser window.<br> With the ability to define min and max height as well as a subtracted value.
- * version v1.2.0
+ * version v1.3.0
  * link https://github.com/Jursdotme/jquery-fillerup
  * license MIT
  */
@@ -8,8 +8,7 @@
 
   // Define constructor
   $.fn.Fillerup = function( options ) {
-
-      // Define option defaults
+    // Define option defaults
       var settings = $.extend({
         subtract: 0,
         minHeight: 0,
@@ -17,23 +16,47 @@
       }, options );
 
       var screenHeightCalculated,
-          windowHeight,
+          subtractableHeight,
+          windowHeight;
 
-          _this = $(this),
-          calculatedHeight = $(window).height() - settings.subtract;
+      _this = $(this);
 
-      if ( calculatedHeight < settings.minHeight ) {
-        calculatedHeight = settings.minHeight;
-      } if ( calculatedHeight > settings.maxHeight && settings.maxHeight !== 0 ) {
-        calculatedHeight = settings.maxHeight;
+      subtractableHeight = settings.subtract;
+    	minHeight = settings.minHeight;
+      maxHeight = settings.maxHeight;
+      calculatedHeight = $(window).height() - subtractableHeight;
+
+      if ( calculatedHeight < minHeight ) {
+        calculatedHeight = minHeight;
+      } if ( calculatedHeight > maxHeight && maxHeight != 0 ) {
+        calculatedHeight = maxHeight;
       } else {
-        $(window).height() - settings.subtract;
+        $(window).height() - subtractableHeight;
       }
 
       $(this)
         .css('height', calculatedHeight + 'px')
-       	.css('min-height', settings.minHeight+'px')
+       	.css('min-height', 'minimumHeight'+'px')
       ;
+
+      function throttle (fn, interval) {
+          var isWaiting = false;
+
+          var exec = function (event) {
+              if (isWaiting) {
+                  return;
+              }
+
+              isWaiting = true;
+              setTimeout(function () {
+                  isWaiting = false;
+                  fn(event);
+              }, interval);
+          };
+
+          return exec;
+      }
+
 
       // update heights on load and resize events
       $( window ).load( function() {
@@ -44,34 +67,14 @@
         });
       });
 
-    // Throttle Fuction
-    function throttle (fn, interval) {
-      var isWaiting = false;
-
-      var exec = function () {
-        if (isWaiting) {
-          return;
-        }
-
-        isWaiting = true;
-        setTimeout(function () {
-          isWaiting = false;
-          fn();
-        }, interval);
-      };
-
-      return exec;
-    }
-
-    // exec on resize function once in every seconds
-    $(window).on('resize', throttle(function (event) {
+      // exec on resize function once in every seconds
+      $(window).on('resize', throttle(function (event) {
         _this.Fillerup({
           subtract: settings.subtract,
           minHeight: settings.minHeight,
           maxHeight: settings.maxHeight
         });
-    }, 1000));
-
+      }, 1000));
   }
 
 }(jQuery));
